@@ -19,34 +19,18 @@ import java.util.List;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
 
+    Context context;
     private List<Movie> movies;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        // only needed because we need to set the background color
-        View view;
-
-        // Lookup view for data population
-        TextView tvName;
-        TextView tvRating;
-        ImageView ivPoster;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            view = itemView;
-            tvName = itemView.findViewById(R.id.tvTitle);
-            tvRating = itemView.findViewById(R.id.tvRating);
-            ivPoster = itemView.findViewById(R.id.ivPoster);
-        }
-    }
-
-    public MoviesAdapter(List<Movie> movies) {
+    public MoviesAdapter(Context context, List<Movie> movies) {
+        this.context = context;
         this.movies = movies;
     }
 
+    // Return the total count of items in the list, was returning 0 every time
     @Override
     public int getItemCount() {
-        return 0;
+        return movies.size();
     }
 
     @NonNull
@@ -59,8 +43,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         View movieView = inflater.inflate(R.layout.item_movie, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(movieView);
-        return viewHolder;
+        return new ViewHolder(movieView);
     }
 
     @Override
@@ -81,8 +64,28 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         String ratingText = String.format(resources.getString(R.string.rating), movieRating);
         viewHolder.tvRating.setText(ratingText);
 
-        Glide.with(viewHolder.ivPoster.getContext()).load(movie.getPosterUrl()).into(
+        Glide.with(context).load(movie.getPosterUrl()).into(
                 viewHolder.ivPoster);
 
     }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        // only needed because we need to set the background color
+        View view;
+
+        // Lookup view for data population
+        TextView tvName;
+        TextView tvRating;
+        ImageView ivPoster;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            view = itemView;
+            tvName = itemView.findViewById(R.id.tvTitle);
+            tvRating = itemView.findViewById(R.id.tvRating);
+            ivPoster = itemView.findViewById(R.id.ivPoster);
+        }
+    }
+
 }
